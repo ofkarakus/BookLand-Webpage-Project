@@ -1,9 +1,10 @@
-import { Header } from "./";
+import { Header, Navbar } from "./";
 
 const Main = () => {
   return (
     <>
       <Header />
+      <Navbar />
     </>
   );
 };
