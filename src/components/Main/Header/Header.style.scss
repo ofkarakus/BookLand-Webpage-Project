@@ -1,0 +1,66 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: rgb(246, 246, 246);
+
+  &__logo {
+    display: flex;
+    align-items: center;
+
+    &__img {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+    &__name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-left: 1rem;
+    }
+  }
+
+  &__searchbar {
+    position: relative;
+
+    &__input {
+      padding: 1rem;
+      padding-left: 4rem;
+      margin-right: 1rem;
+      border-radius: 2px;
+      border: 0;
+      width: 35rem;
+      outline: 0;
+      font-size: 1.1rem;
+      
+    }
+
+    &__icon {
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      left: 13px;
+      top: 13px;
+      padding-right: 8px;
+      border-right: 2px lightgray solid;
+      opacity: 0.4;
+    }
+    &__btn {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      font-size: 1rem;
+      border: 0;
+      background-color: white;
+      outline: 0;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-left: 2px solid rgb(237,237,237);
+      padding-left: 1rem;
+      padding-right: 0.8rem;
+      
+    }
+  }
+}
