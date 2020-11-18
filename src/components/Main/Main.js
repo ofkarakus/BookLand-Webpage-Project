@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Header, Navbar, Slider } from "./";
+import { Header, Navbar, Slider, CardList } from "./";
 import axios from "axios";
 
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
@@ -13,10 +13,12 @@ const authors = {
 };
 
 const Main = () => {
-  const [bookList, setBookList] = useState();
+  const [sliderBookData, setSliderBookData] = useState();
   const [chosenAuthorFullName, setChosenAuthorFullName] = useState();
+  const [cardListBookData, setCardListBookData] = useState();
 
-  const fetchData = async () => {
+
+  const fetchSliderData = async () => {
     let chosenAuthor = Object.keys(authors)[
       Math.floor(Math.random() * Object.keys(authors).length)
     ];
@@ -28,19 +30,33 @@ const Main = () => {
     } = await axios.get(baseUrl, {
       params: { q: "inauthor:" + chosenAuthor, maxResults: 40, key: apiKey },
     });
-    setBookList(items);
+    setSliderBookData(items);
+  };
+
+  const fetchCardListData = async () => {
+    let chosenAuthor = Object.keys(authors)[
+      Math.floor(Math.random() * Object.keys(authors).length)
+    ];
+
+    const {
+      data: { items },
+    } = await axios.get(baseUrl, {
+      params: { q: "inauthor:" + chosenAuthor, maxResults: 40, key: apiKey },
+    });
+    setCardListBookData(items);
   };
 
   useEffect(() => {
-    fetchData();
+    fetchSliderData();
+    fetchCardListData();
   }, []);
 
-  console.log(bookList);
   return (
     <>
       <Header />
       <Navbar />
-      <Slider chosenAuthorFullName={chosenAuthorFullName} bookList={bookList} />
+      <Slider chosenAuthorFullName={chosenAuthorFullName} sliderBookData={sliderBookData} />
+      <CardList cardListBookData={cardListBookData} />
     </>
   );
 };

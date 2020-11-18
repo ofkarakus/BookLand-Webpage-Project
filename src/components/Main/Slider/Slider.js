@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import "./Slider.style.scss";
+import bookDefault from "../../../assets/images/book-default.png";
 import '../../../assets/fonts/BerkshireSwash-Regular.ttf'
 
-export const Slider = ({ bookList, chosenAuthorFullName }) => {
+export const Slider = ({ sliderBookData, chosenAuthorFullName }) => {
   let slideIndex = 0;
 
   useEffect(() => {
     showSlides();
-  }, [bookList]);
+  }, [sliderBookData]);
 
   function showSlides() {
-    if (bookList) {
+    if (sliderBookData) {
       let slides = document.getElementsByClassName("slider__bookContainer__item");
 
       for (let i = 0; i < slides.length; i++) {
@@ -32,11 +33,15 @@ export const Slider = ({ bookList, chosenAuthorFullName }) => {
     <div className="slider">
       <p className="slider__authorName">{chosenAuthorFullName}'s Books</p>
       <div className="slider__bookContainer">
-        {bookList?.map((item, i) => (
+        {sliderBookData?.map((item, i) => (
           <div key={i} className="slider__bookContainer__item">
             <img
               className="slider__bookContainer__item__img"
-              src={item?.volumeInfo?.imageLinks?.thumbnail}
+              src={
+                item?.volumeInfo?.imageLinks?.thumbnail
+                  ? item.volumeInfo.imageLinks.thumbnail
+                  : bookDefault
+              }
             />
           </div>
         ))}

@@ -1,0 +1,64 @@
+p {
+  margin: 0;
+  padding: 0;
+}
+.card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.8rem;
+  width: 17rem;
+  height: 33rem;
+  background-color: #eeeeee;
+  margin-top: 2rem;
+  position: relative;
+  border-radius: 1rem;
+  transition: 0.2s;
+  box-shadow: 10px 10px 10px #bdbdbd;
+  &:hover {
+    transform: scale(1.01);
+  }
+
+  &__img {
+    margin-top: 1rem;
+    width: 150px;
+    height: 230px;
+  }
+
+  &__rating {
+    margin-top: 1rem;
+
+    &__star {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  &__title {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+  &__authors {
+    margin-top: 1rem;
+    text-align: center;
+
+  }
+  &__publisher {
+    margin-top: 0.8rem;
+    font-size: 0.9rem;
+  }
+  &__price {
+    margin-top: 1rem;
+    border: 1px solid gray;
+    width: 85%;
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    padding: 5px 0px;
+    margin-top: 0.5rem;
+    border-radius: 5px;
+    &__amount{
+      font-size: 12px;
+    }
+  }
+}

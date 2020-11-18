@@ -1,6 +1,6 @@
 import "./Header.style.scss";
-import book from "../../../assets/book.png";
-import loupe from "../../../assets/loupe.png";
+import book from "../../../assets/images/book.png";
+import loupe from "../../../assets/images/loupe.png";
 
 export const Header = () => {
   return (
