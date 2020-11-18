@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "BerkshireSwash-Regular";
+  src: local("BerkshireSwash-Regular"),
+    url(../../../assets/fonts/BerkshireSwash-Regular.ttf) format("truetype");
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.slider {
+  background-color: #eceff1;
+  padding: 2rem;
+  &__authorName {
+    margin: 0;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-weight: bolder;
+    font-family: "BerkshireSwash-Regular";
+    font-size: 2rem;
+  }
+
+  &__bookContainer {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    &__item {
+      &__img {
+        width: 195px;
+        height: 300px;
+        transition: 0.5s;
+        border-radius: 0.2rem;
+        box-shadow: 10px 10px 10px #424242;
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
