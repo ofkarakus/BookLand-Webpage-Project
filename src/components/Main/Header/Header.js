@@ -1,8 +1,12 @@
 import "./Header.style.scss";
+import {useRef} from 'react'
 import book from "../../../assets/images/book.png";
 import loupe from "../../../assets/images/loupe.png";
 
-export const Header = () => {
+export const Header = ({onSearch}) => {
+
+const inputRef = useRef()
+
   return (
     <div className="header">
       <div className="header__logo">
@@ -16,11 +20,13 @@ export const Header = () => {
           className="header__searchbar__icon"
         />
         <input
+          ref={inputRef}
+          // onChange={e => onSearch(e.target.value)}
           type="text"
           className="header__searchbar__input"
           placeholder="Which book are you looking for?"
         />
-        <button className="header__searchbar__btn">Search</button>
+        <button onClick={() => onSearch(inputRef.current.value) } className="header__searchbar__btn">Search</button>
       </div>
       <div className="header__login">LOGIN</div>
     </div>

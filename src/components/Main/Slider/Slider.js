@@ -1,18 +1,29 @@
 import { useEffect } from "react";
 import "./Slider.style.scss";
 import bookDefault from "../../../assets/images/book-default.png";
-import '../../../assets/fonts/BerkshireSwash-Regular.ttf'
+import "../../../assets/fonts/BerkshireSwash-Regular.ttf";
 
 export const Slider = ({ sliderBookData, chosenAuthorFullName }) => {
   let slideIndex = 0;
+  var timer;
 
   useEffect(() => {
     showSlides();
   }, [sliderBookData]);
 
+  // this is the last function will be executed before the Slider component unmount
+
+  useEffect(() => {
+    return () => clearTimeout(timer);
+  });
+
+  // ------!!!-------
+
   function showSlides() {
     if (sliderBookData) {
-      let slides = document.getElementsByClassName("slider__bookContainer__item");
+      let slides = document.getElementsByClassName(
+        "slider__bookContainer__item"
+      );
 
       for (let i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
@@ -25,7 +36,7 @@ export const Slider = ({ sliderBookData, chosenAuthorFullName }) => {
       slides[slideIndex + 1].style.display = "block";
       slides[slideIndex + 2].style.display = "block";
 
-      setTimeout(showSlides, 5000); // Change image every 5 seconds
+      timer = setTimeout(showSlides, 5000); // Change image every 5 seconds
     }
   }
 

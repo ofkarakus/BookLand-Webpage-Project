@@ -8,13 +8,14 @@ p {
   flex-direction: column;
   padding: 0.8rem;
   width: 17rem;
-  height: 33rem;
-  background-color: #eeeeee;
+  height: 32rem;
+  background-color: #c1d5e0;
   margin-top: 2rem;
   position: relative;
   border-radius: 1rem;
   transition: 0.2s;
   box-shadow: 10px 10px 10px #bdbdbd;
+  overflow: hidden;
   &:hover {
     transform: scale(1.01);
   }
@@ -37,15 +38,23 @@ p {
     font-size: 0.9rem;
     margin-top: 1rem;
     text-align: center;
+    max-height: 2.5rem;
+    overflow: hidden;
   }
   &__authors {
     margin-top: 1rem;
     text-align: center;
-
+    font-size: 0.9rem;
+    font-weight: bold;
+    max-height: 2.5rem;
+    overflow: hidden;
   }
   &__publisher {
     margin-top: 0.8rem;
     font-size: 0.9rem;
+    max-height: 2.5rem;
+    overflow: hidden;
+    text-align: center;
   }
   &__price {
     margin-top: 1rem;

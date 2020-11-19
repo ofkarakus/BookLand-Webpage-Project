@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Header, Navbar, Slider, CardList } from "./";
+import { Header, Navbar, Slider, CardList, Footer } from "./";
 import axios from "axios";
 
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
@@ -16,7 +16,8 @@ const Main = () => {
   const [sliderBookData, setSliderBookData] = useState();
   const [chosenAuthorFullName, setChosenAuthorFullName] = useState();
   const [cardListBookData, setCardListBookData] = useState();
-
+  const [query, setQuery] = useState("");
+  const [queryData, setQueryData] = useState();
 
   const fetchSliderData = async () => {
     let chosenAuthor = Object.keys(authors)[
@@ -46,17 +47,53 @@ const Main = () => {
     setCardListBookData(items);
   };
 
+  const fetchQueryData = async () => {
+    const {
+      data: { items },
+    } = await axios.get(baseUrl, {
+      params: { q: query, maxResults: 40, key: apiKey },
+    });
+    setQueryData(items);
+  };
+
   useEffect(() => {
-    fetchSliderData();
     fetchCardListData();
+    fetchSliderData();
   }, []);
+
+  useEffect(() => {
+    fetchQueryData();
+  }, [query]);
 
   return (
     <>
-      <Header />
+      <Header
+        onSearch={(value) => {
+          setQuery(value);
+        }}
+      />
       <Navbar />
-      <Slider chosenAuthorFullName={chosenAuthorFullName} sliderBookData={sliderBookData} />
-      <CardList cardListBookData={cardListBookData} />
+      {query ? (
+        <p
+          style={{
+            textAlign: "center",
+            backgroundColor: "aliceblue",
+            paddingTop: "2rem",
+            fontWeight: "bold",
+            fontSize: '1.3rem',
+            color: '#455a64'
+          }}
+        >
+          Search Results
+        </p>
+      ) : (
+        <Slider
+          chosenAuthorFullName={chosenAuthorFullName}
+          sliderBookData={sliderBookData}
+        />
+      )}
+      <CardList cardListBookData={cardListBookData} queryData={queryData} />
+      <Footer />
     </>
   );
 };
