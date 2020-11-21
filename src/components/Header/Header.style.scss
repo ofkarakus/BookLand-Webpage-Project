@@ -62,4 +62,9 @@
       color: #616161;
     }
   }
+
+  &__login {
+    display: flex;
+    flex-direction: column;
+  }
 }
