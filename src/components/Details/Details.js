@@ -1,7 +1,10 @@
 import { BookInfo } from "./";
+import { useLocation } from 'react-router-dom'
 
 const Details = () => {
-  return <BookInfo />;
+  const {state} = useLocation();
+
+  return <BookInfo item={state} />;
 };
 
 export default Details;

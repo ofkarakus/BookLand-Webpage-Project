@@ -35,7 +35,7 @@ function App() {
       />
       <Switch>
         <Route path="/" component={Main} exact />
-        <Route path="/details" component={Details} />
+        <Route path="/details/:id" component={Details} />
         <Route component={Error} />
       </Switch>
     </Context.Provider>

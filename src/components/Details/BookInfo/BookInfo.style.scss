@@ -1,0 +1,103 @@
+.info {
+
+  &__general {
+    display: flex;
+    padding: 3rem 6rem;
+    align-items: center;
+    justify-content: space-around;
+    &__titleImg {
+      &__title {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        max-width: 25rem;
+      }
+      &__img {
+        width: 13rem;
+        height: 20rem;
+        box-shadow: 10px 10px 10px lightgray;
+        border-radius: 3px;
+      }
+      &__rating {
+        display: flex;
+        margin-top: 1.2rem;
+        width: 13rem;
+
+        &__star {
+
+          margin: auto;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+    &__other {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      
+      &__primary {
+        margin: 1rem 0rem;
+        border: 1px solid;
+        padding: 0.5rem;
+        box-shadow: 5px 5px 5px lightgray;
+        border-radius: 1rem;
+        td:nth-of-type(1){
+          width: 8rem;
+        }
+        td:nth-of-type(2) {
+          font-weight: bold;
+          max-width: 15rem;
+        }
+      }
+
+      &__like {
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        border: 1px solid red;
+        padding: 0.2rem 0.4rem 0.2rem 1rem;
+        border-radius: 10rem;
+        margin-bottom: 1rem;
+        box-shadow: 5px 5px 10px rgb(255, 137, 137);
+
+        &__addFavImg {
+          width: 2rem;
+          height: 2rem;
+          margin: 0.1rem 0.5rem;
+        }
+        &__addFavText {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          color: red;
+          font-weight: bold;
+          font-size: 10px;
+        }
+      }
+
+      &__secondary {
+        text-align: center;
+        border: 1px solid;
+        border-radius: 1rem;
+        padding: 1rem;
+        box-shadow: 5px 5px 5px lightgray;
+        margin-top: 1rem;
+
+        &__price{
+          font-weight: bold;
+          margin-bottom: 0.7rem;
+        }
+      }
+    }
+  }
+  &__description {
+    margin-bottom: 3rem;
+    &__text{
+      margin: 0 auto;
+      width: 60rem;
+      text-align: justify;
+    }    
+  }
+}

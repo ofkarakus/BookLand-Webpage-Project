@@ -10,7 +10,7 @@ const Header = ({ onSearch }) => {
 
   return (
     <div className="header">
-      <div className="header__logo" onClick={() => history.push("/")}>
+      <div className="header__logo" onClick={() => history.push('/')}>
         <img src={book} alt="logo_image" className="header__logo__img" />
         <p className="header__logo__name">BookLand</p>
       </div>
@@ -28,16 +28,14 @@ const Header = ({ onSearch }) => {
           placeholder="Which book are you looking for?"
         />
         <button
-          onClick={() => onSearch(inputRef.current.value)}
+          onClick={() => { onSearch(inputRef.current.value); history.push('/');}}
           className="header__searchbar__btn"
         >
           Search
         </button>
       </div>
       <div className="header__login">
-        <a href="/details" className="router-test">
-          Details
-        </a>
+        LOGIN
       </div>
     </div>
   );
