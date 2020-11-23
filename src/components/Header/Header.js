@@ -5,6 +5,7 @@ import loupe from "../../assets/images/loupe.png";
 import { useHistory } from "react-router-dom";
 import { auth } from "../../firebase";
 import Modal from "react-modal";
+import { Link } from "react-router-dom";
 
 const customStyles = {
   content: {
@@ -22,6 +23,28 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("userDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function (event) {
+  if (!event.target.matches(".header__login__dropdown__btn")) {
+    var dropdowns = document.getElementsByClassName(
+      "header__login__dropdown__content"
+    );
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains("show")) {
+        openDropdown.classList.remove("show");
+      }
+    }
+  }
+};
+
 const Header = ({ onSearch }) => {
   const history = useHistory();
 
@@ -33,6 +56,15 @@ const Header = ({ onSearch }) => {
   const signUpConfirmRef = useRef();
 
   const [modalFlag, setModalFlag] = useState(false);
+  const [hasSession, setSession] = useState(false);
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setSession(true);
+    } else {
+      setSession(false);
+    }
+  });
 
   return (
     <div className="header">
@@ -64,12 +96,35 @@ const Header = ({ onSearch }) => {
         </button>
       </div>
       <div className="header__login">
-        <button
-          className="header__login__btn"
-          onClick={() => setModalFlag(true)}
-        >
-          Sign In / Sign Up
-        </button>
+        {hasSession ? (
+          <div className="header__login__dropdown">
+            <button
+              onClick={() => {
+                myFunction();
+              }}
+              className="header__login__dropdown__btn"
+            >
+              Welcome {auth.currentUser?.email?.split("@")[0]}
+            </button>
+            <div id="userDropdown" className="header__login__dropdown__content">
+              <Link to="">Favorites</Link>
+              <Link
+                onClick={() => {
+                  auth.signOut();
+                }}
+              >
+                Sign Out
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <button
+            className="header__login__modalBtn"
+            onClick={() => setModalFlag(true)}
+          >
+            Sign In / Sign Up
+          </button>
+        )}
       </div>
       <Modal
         isOpen={modalFlag}
@@ -101,7 +156,10 @@ const Header = ({ onSearch }) => {
                   signInEmailRef.current.value,
                   signInPasswordRef.current.value
                 )
-                .then(() => alert("You successfully signed in."))
+                .then(() => {
+                  alert("You successfully signed in.");
+                  setModalFlag(false);
+                })
                 .catch((err) => alert(err.message));
             }}
           >
@@ -146,7 +204,10 @@ const Header = ({ onSearch }) => {
                     signUpEmailRef.current.value,
                     signUpPasswordRef.current.value
                   )
-                  .then(() => alert("You successfully signed in."))
+                  .then(() => {
+                    alert("Your account successfully created.");
+                    setModalFlag(false);
+                  })
                   .catch((err) => alert(err.message));
               } else {
                 alert("Those passwords didn't match. Try again.");
