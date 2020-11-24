@@ -1,11 +1,11 @@
 import "./Header.style.scss";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import book from "../../assets/images/book.png";
 import loupe from "../../assets/images/loupe.png";
 import { useHistory } from "react-router-dom";
-import { auth } from "../../firebase";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
+import {Context} from '../../App'
 
 const customStyles = {
   content: {
@@ -56,7 +56,8 @@ const Header = ({ onSearch }) => {
   const signUpConfirmRef = useRef();
 
   const [modalFlag, setModalFlag] = useState(false);
-  const [hasSession, setSession] = useState(false);
+
+  const { hasSession, auth, setSession, getFavorites } = useContext(Context);
 
   auth.onAuthStateChanged((user) => {
     if (user) {
@@ -107,7 +108,7 @@ const Header = ({ onSearch }) => {
               Welcome {auth.currentUser?.email?.split("@")[0]}
             </button>
             <div id="userDropdown" className="header__login__dropdown__content">
-              <Link to="">Favorites</Link>
+              <Link onClick={()=>{getFavorites()}} to="">Favorites</Link>
               <Link
                 onClick={() => {
                   auth.signOut();

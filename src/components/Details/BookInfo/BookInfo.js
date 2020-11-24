@@ -1,19 +1,34 @@
 import "./BookInfo.style.scss";
 import like from "../../../assets/images/like.png";
 import likeOutline from "../../../assets/images/like-outline.png";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import star from "../../../assets/images/star.png";
 import starOutline from "../../../assets/images/star-outline.png";
 import bookDefault from "../../../assets/images/book-default.png";
+import { Context } from "../../../App";
 
 export const BookInfo = ({ item }) => {
+
+  const {
+    hasSession,
+    favorites,
+    createFavorites,
+    addToFavorites,
+    removeFromFavorites,
+    getFavorites,
+  } = useContext(Context);
+
   const [isLiked, setLiked] = useState(false);
+
+  useEffect(() => {
+    getFavorites()
+  }, []);
+
 
   function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
 
-  console.log(item);
   const rating = Array(
     Math.floor(
       item?.volumeInfo?.averageRating ? item.volumeInfo.averageRating : 0
@@ -61,41 +76,49 @@ export const BookInfo = ({ item }) => {
         </div>
 
         <div className="info__general__other">
-          <div className="info__general__other__like">
-            {isLiked ? (
-              <p className="info__general__other__like__addFavText">
-                <span>Remove</span>
-                <span>From</span>
-                <span>Favorites</span>
-              </p>
-            ) : (
-              <p className="info__general__other__like__addFavText">
-                <span>Add</span>
-                <span>To</span>
-                <span>Favorites</span>
-              </p>
-            )}
-            {isLiked ? (
-              <img
-                onClick={() => {
-                  setLiked((prevState) => !prevState);
-                }}
-                src={like}
-                alt="addToFavsImage"
-                className="info__general__other__like__addFavImg"
-              />
-            ) : (
-              <img
-                onClick={() => {
-                  setLiked((prevState) => !prevState);
-                }}
-                src={likeOutline}
-                style={{ backgroundColor: "white" }}
-                alt="addToFavsImage"
-                className="info__general__other__like__addFavImg"
-              />
-            )}
-          </div>
+          {hasSession ? (
+            <div className="info__general__other__like">
+              {isLiked ? (
+                <p className="info__general__other__like__addFavText">
+                  <span>Remove</span>
+                  <span>From</span>
+                  <span>Favorites</span>
+                </p>
+              ) : (
+                <p className="info__general__other__like__addFavText">
+                  <span>Add</span>
+                  <span>To</span>
+                  <span>Favorites</span>
+                </p>
+              )}
+              {isLiked ? (
+                <img
+                  onClick={() => {
+                    setLiked((prevState) => !prevState);
+                    removeFromFavorites(item);
+                  }}
+                  src={like}
+                  alt="addToFavsImage"
+                  className="info__general__other__like__addFavImg"
+                />
+              ) : (
+                <img
+                  onClick={() => {
+                    setLiked((prevState) => !prevState);
+                    favorites
+                      ? addToFavorites(item)
+                      : // console.log('add')
+                        createFavorites(item);
+                    // console.log('create')
+                  }}
+                  src={likeOutline}
+                  style={{ backgroundColor: "white" }}
+                  alt="addToFavsImage"
+                  className="info__general__other__like__addFavImg"
+                />
+              )}
+            </div>
+          ) : null}
 
           <div>
             <table className="info__general__other__primary">
@@ -184,7 +207,7 @@ export const BookInfo = ({ item }) => {
       </div>
 
       <div className="info__description">
-        <p className="info__description__text" >{item.volumeInfo.description}</p>
+        <p className="info__description__text">{item.volumeInfo.description}</p>
       </div>
     </div>
   );
