@@ -6,8 +6,12 @@ import star from "../../../assets/images/star.png";
 import starOutline from "../../../assets/images/star-outline.png";
 import bookDefault from "../../../assets/images/book-default.png";
 import { Context } from "../../../App";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
-export const BookInfo = ({ item }) => {
+export const BookInfo = () => {
+  const { id } = useParams();
+  const [item, setItem] = useState();
 
   const {
     hasSession,
@@ -15,18 +19,29 @@ export const BookInfo = ({ item }) => {
     createFavorites,
     addToFavorites,
     removeFromFavorites,
-    getFavorites,
+    baseUrl,
+    apiKey,
   } = useContext(Context);
 
-  const [isLiked, setLiked] = useState(false);
+  const fetchBookData = () => {
+    axios.get(`${baseUrl}/${id}`, { params: { key: apiKey } }).then((res) => {
+      setItem(res.data);
+    });
+  };
+
+  const checkLiked = () => {
+    if (favorites?.filter((fav) => fav.id == id).length > 0) {
+      return true;
+    }
+    return false;
+  };
 
   useEffect(() => {
-    getFavorites()
+    fetchBookData();
   }, []);
 
-
   function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    return string?.charAt(0).toUpperCase() + string?.slice(1).toLowerCase();
   }
 
   const rating = Array(
@@ -42,11 +57,11 @@ export const BookInfo = ({ item }) => {
       <div className="info__general">
         <div className="info__general__titleImg">
           <p className="info__general__titleImg__title">
-            {item.volumeInfo.title}
+            {item?.volumeInfo?.title}
           </p>
-          {item.volumeInfo.imageLinks?.thumbnail ? (
+          {item?.volumeInfo?.imageLinks?.thumbnail ? (
             <img
-              src={item.volumeInfo.imageLinks.thumbnail}
+              src={item?.volumeInfo?.imageLinks?.thumbnail}
               alt="bookCover"
               className="info__general__titleImg__img"
             />
@@ -78,7 +93,7 @@ export const BookInfo = ({ item }) => {
         <div className="info__general__other">
           {hasSession ? (
             <div className="info__general__other__like">
-              {isLiked ? (
+              {checkLiked() ? (
                 <p className="info__general__other__like__addFavText">
                   <span>Remove</span>
                   <span>From</span>
@@ -91,11 +106,20 @@ export const BookInfo = ({ item }) => {
                   <span>Favorites</span>
                 </p>
               )}
-              {isLiked ? (
+              {checkLiked() ? (
                 <img
                   onClick={() => {
-                    setLiked((prevState) => !prevState);
-                    removeFromFavorites(item);
+                    // this bug took me one day. it has just been solved
+                    // while working on it together with my codeBuddy Ekrem. the problem is that
+                    // every query from google book api come back with a unique value.
+                    // because of that it is not possible to remove the item using
+                    // "item" state as "data" parameter of the function.
+                    // so we had to findIndex of the item that we want to remove then get item
+                    // using array[index] method. what a day...
+
+                    removeFromFavorites(
+                      favorites[favorites?.findIndex((fav) => fav.id == id)]
+                    );
                   }}
                   src={like}
                   alt="addToFavsImage"
@@ -104,12 +128,7 @@ export const BookInfo = ({ item }) => {
               ) : (
                 <img
                   onClick={() => {
-                    setLiked((prevState) => !prevState);
-                    favorites
-                      ? addToFavorites(item)
-                      : // console.log('add')
-                        createFavorites(item);
-                    // console.log('create')
+                    favorites ? addToFavorites(item) : createFavorites(item);
                   }}
                   src={likeOutline}
                   style={{ backgroundColor: "white" }}
@@ -124,24 +143,24 @@ export const BookInfo = ({ item }) => {
             <table className="info__general__other__primary">
               <tr className="info__general__other__primary__author">
                 <td>Author:</td>
-                <td>{item.volumeInfo.authors?.join(" - ")}</td>
+                <td>{item?.volumeInfo?.authors?.join(" - ")}</td>
               </tr>
               <tr className="info__general__other__primary__publisher">
                 <td>Publisher:</td>
-                <td>{item.volumeInfo.publisher}</td>
+                <td>{item?.volumeInfo?.publisher}</td>
               </tr>
               <tr className="info__general__other__primary__publishedDate">
                 <td>Published Date:</td>
-                <td> {item.volumeInfo.publishedDate}</td>
+                <td> {item?.volumeInfo?.publishedDate}</td>
               </tr>
               <tr className="info__general__other__primary__printType">
                 <td>Print Type:</td>
-                <td>{capitalize(item.volumeInfo.printType)}</td>
+                <td>{capitalize(item?.volumeInfo?.printType)}</td>
               </tr>
               <tr className="info__general__other__primary__category">
                 <td>Category:</td>
                 <td>
-                  {item.volumeInfo.categories?.map((category) => (
+                  {item?.volumeInfo?.categories?.map((category) => (
                     <span> {category}</span>
                   ))}
                 </td>
@@ -149,45 +168,47 @@ export const BookInfo = ({ item }) => {
               <tr className="info__general__other__primary__pageCount">
                 <td>Page Count:</td>
                 <td>
-                  {item.volumeInfo.pageCount ? item.volumeInfo.pageCount : null}
+                  {item?.volumeInfo?.pageCount
+                    ? item.volumeInfo.pageCount
+                    : null}
                 </td>
               </tr>
               <tr className="info__general__other__primary__language">
                 <td>Language:</td>
-                <td>{item.volumeInfo.language.toUpperCase()}</td>
+                <td>{item?.volumeInfo?.language.toUpperCase()}</td>
               </tr>
             </table>
           </div>
 
           <div className="info__general__other__secondary">
-            {item.saleInfo?.listPrice ? (
+            {item?.saleInfo?.listPrice ? (
               <p className="info__general__other__secondary__price">
                 <span style={{ fontWeight: "normal" }}>Price: </span>
-                {item.saleInfo.listPrice.amount}{" "}
-                {item.saleInfo.listPrice.currencyCode}
+                {item?.saleInfo?.listPrice?.amount}{" "}
+                {item?.saleInfo?.listPrice?.currencyCode}
               </p>
             ) : (
               <p className="info__general__other__secondary__price">
-                {item.saleInfo.saleability
+                {item?.saleInfo?.saleability
                   .split("_")
                   .map((word) => capitalize(word))
                   .join(" ")}
               </p>
             )}
-            {item.saleInfo.saleability !== "NOT_FOR_SALE" ? (
-              <a href={item.saleInfo.buyLink} target="_">
+            {item?.saleInfo?.saleability !== "NOT_FOR_SALE" ? (
+              <a href={item?.saleInfo?.buyLink} target="_">
                 <button className="info__general__other__secondary__buy">
                   Buy
                 </button>
               </a>
             ) : null}
-            {item.accessInfo.epub.isAvailable ||
-            item.accessInfo.pdf.isAvailable ? (
+            {item?.accessInfo?.epub?.isAvailable ||
+            item?.accessInfo?.pdf?.isAvailable ? (
               <a
                 href={
-                  item.accessInfo.epub.isAvailable
-                    ? item.accessInfo.epub.acsTokenLink
-                    : item.accessInfo.pdf.acsTokenLink
+                  item?.accessInfo?.epub?.isAvailable
+                    ? item?.accessInfo?.epub?.acsTokenLink
+                    : item?.accessInfo?.pdf?.acsTokenLink
                 }
               >
                 <button className="info__general__other__secondary__download">
@@ -195,8 +216,8 @@ export const BookInfo = ({ item }) => {
                 </button>
               </a>
             ) : null}
-            {item.accessInfo.viewability !== "NO_PAGES" ? (
-              <a href={item.accessInfo.webReaderLink} target="_">
+            {item?.accessInfo?.viewability !== "NO_PAGES" ? (
+              <a href={item?.accessInfo?.webReaderLink} target="_">
                 <button className="info__general__other__secondary__view">
                   View
                 </button>
@@ -207,7 +228,9 @@ export const BookInfo = ({ item }) => {
       </div>
 
       <div className="info__description">
-        <p className="info__description__text">{item.volumeInfo.description}</p>
+        <p className="info__description__text">
+          {item?.volumeInfo?.description}
+        </p>
       </div>
     </div>
   );

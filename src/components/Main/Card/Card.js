@@ -37,11 +37,11 @@ export default function Card({ item }) {
         className="card__img"
       />
       <div className="card__rating">
-        {rating.map((str) => (
-          <img src={star} alt="rating" className="card__rating__star" />
+        {rating.map((str, i) => (
+          <img key={i} src={star} alt="rating" className="card__rating__star" />
         ))}
-        {emptyStar.map((str) => (
-          <img src={starOutline} alt="rating" className="card__rating__star" />
+        {emptyStar.map((str, i) => (
+          <img key={i} src={starOutline} alt="rating" className="card__rating__star" />
         ))}
       </div>
       <p className="card__title">{item.volumeInfo.title}</p>

@@ -6,7 +6,7 @@ import Details from "./components/Details/Details";
 import Header from "./components/Header/Header";
 import Favorites from "./components/Favorites/Favorites";
 import { firestore, auth } from "./firebase";
-import firebase from 'firebase'
+import firebase from "firebase";
 
 export const Context = createContext();
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
@@ -16,38 +16,56 @@ function App() {
   const [query, setQuery] = useState("");
   const [queryData, setQueryData] = useState();
   const [hasSession, setSession] = useState(false);
-  const [favorites, setFavorites] = useState()
+  const [favorites, setFavorites] = useState();
 
   const getFavorites = async () => {
+    // LISTEN FOR REALTIME UPDATES
+
+    // it is enough to call once then it will listen on its own
+    // useEffect(()=>{getFavorites()},[])
+
     const userRef = firestore.doc(`users/${auth.currentUser?.uid}`);
-    const snapshot = await userRef.get();
-    if (!snapshot.exists) {
-      console.log("No such document!");
-    } else {
-      setFavorites(snapshot.data().favorites)
-    }
+    userRef.onSnapshot(
+      (snapshot) => {
+        setFavorites(snapshot.data()?.favorites);
+        console.log(`Received doc snapshot: ${snapshot}`);
+      },
+      (err) => {
+        console.log(`Encountered error: ${err}`);
+      }
+    );
+
+    // GET DATA ONCE
+
+    // const userRef = firestore.doc(`users/${auth.currentUser?.uid}`);
+    // const snapshot = await userRef.get();
+    // if (!snapshot.exists) {
+    //   console.log("No such document!");
+    // } else {
+    //   setFavorites(snapshot.data().favorites);
+    //   console.log( 'set', snapshot.data().favorites)
+    // }
   };
 
   const createFavorites = async (data) => {
     const userRef = firestore.doc(`users/${auth.currentUser?.uid}`);
-    await userRef.set({favorites: [data]})
-  }
+    await userRef.set({ favorites: [data] });
+  };
 
   const addToFavorites = async (data) => {
     const userRef = firestore.doc(`users/${auth.currentUser?.uid}`);
     await userRef.update({
-      favorites: firebase.firestore.FieldValue.arrayUnion(data)
+      favorites: firebase.firestore.FieldValue.arrayUnion(data),
     });
-  }
+  };
 
   const removeFromFavorites = async (data) => {
     const userRef = firestore.doc(`users/${auth.currentUser?.uid}`);
     await userRef.update({
-      favorites: firebase.firestore.FieldValue.arrayRemove(data)
+      favorites: firebase.firestore.FieldValue.arrayRemove(data),
     });
-  }
+  };
 
-  
   const fetchQueryData = async () => {
     const {
       data: { items },
@@ -60,6 +78,10 @@ function App() {
   useEffect(() => {
     fetchQueryData();
   }, [query]);
+
+  useEffect(() => {
+    getFavorites();
+  }, [auth.currentUser?.uid]);
 
   return (
     <Context.Provider
@@ -75,7 +97,6 @@ function App() {
         createFavorites,
         addToFavorites,
         removeFromFavorites,
-        getFavorites
       }}
     >
       <Header
