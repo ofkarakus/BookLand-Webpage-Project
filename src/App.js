@@ -5,8 +5,11 @@ import Main from "./components/Main/Main";
 import Details from "./components/Details/Details";
 import Header from "./components/Header/Header";
 import Favorites from "./components/Favorites/Favorites";
-import { firestore, auth } from "./firebase";
 import firebase from "firebase";
+import fb from "./firebase/firebase.utils";
+
+const auth = fb.auth;
+const firestore = fb.firestore;
 
 export const Context = createContext();
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
