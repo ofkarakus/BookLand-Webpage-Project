@@ -13,7 +13,7 @@ const firestore = fb.firestore;
 
 export const Context = createContext();
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
-const apiKey = "AIzaSyBMJ_IyIfi1gfXiob41sgFmuwN5FUxAdMQ";
+const apiKey = process.env.REACT_APP_API_KEY;
 
 function App() {
   const [query, setQuery] = useState("");
