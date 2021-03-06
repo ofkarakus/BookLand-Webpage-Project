@@ -30,15 +30,13 @@ export const BookInfo = () => {
   };
 
   const checkLiked = () => {
-    if (favorites?.filter((fav) => fav.id == id).length > 0) {
+    if (favorites?.filter((fav) => fav.id === id).length > 0) {
       return true;
     }
     return false;
   };
 
-  useEffect(() => {
-    fetchBookData();
-  }, []);
+  useEffect(fetchBookData, []);
 
   function capitalize(string) {
     return string?.charAt(0).toUpperCase() + string?.slice(1).toLowerCase();
@@ -118,7 +116,7 @@ export const BookInfo = () => {
                     // using array[index] method. what a day...
 
                     removeFromFavorites(
-                      favorites[favorites?.findIndex((fav) => fav.id == id)]
+                      favorites[favorites?.findIndex((fav) => fav.id === id)]
                     );
                   }}
                   src={like}

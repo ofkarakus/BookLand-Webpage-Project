@@ -2,17 +2,15 @@ import { useEffect } from "react";
 import "./Slider.style.scss";
 import bookDefault from "../../../assets/images/book-default.png";
 import "../../../assets/fonts/BerkshireSwash-Regular.ttf";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 export const Slider = ({ sliderBookData, chosenAuthorFullName }) => {
   let slideIndex = 0;
   var timer;
 
-  const history = useHistory()
+  const history = useHistory();
 
-  useEffect(() => {
-    showSlides();
-  }, [sliderBookData]);
+  useEffect(showSlides, [sliderBookData]);
 
   // this is the last function will be executed before the Slider component unmount
 
@@ -50,8 +48,10 @@ export const Slider = ({ sliderBookData, chosenAuthorFullName }) => {
         {sliderBookData?.map((item, i) => (
           <div key={i} className="slider__bookContainer__item">
             <img
-              onClick={() => history.push({pathname: `/details/${item.id}`, state: item})}
-              alt= 'Book'
+              onClick={() =>
+                history.push({ pathname: `/details/${item.id}`, state: item })
+              }
+              alt="Book"
               className="slider__bookContainer__item__img"
               src={
                 item?.volumeInfo?.imageLinks?.thumbnail

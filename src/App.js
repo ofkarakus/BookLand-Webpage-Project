@@ -78,9 +78,7 @@ function App() {
     setQueryData(items);
   };
 
-  useEffect(() => {
-    fetchQueryData();
-  }, [query]);
+  useEffect(fetchQueryData, [query]);
 
   useEffect(() => {
     getFavorites();

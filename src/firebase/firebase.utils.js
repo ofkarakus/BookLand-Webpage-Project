@@ -15,7 +15,7 @@ const developmentConfig = {
 const productionConfig = {};
 
 const config =
-  process.env.NODE_ENV == "development" ? developmentConfig : productionConfig;
+  process.env.NODE_ENV === "development" ? developmentConfig : productionConfig;
 
 class Firebase {
   constructor() {
